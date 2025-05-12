@@ -5,9 +5,9 @@ Single cycle processor coded in verilog based on the MIPS processor
 
 Instruction set:
 
-• the arithmetic and logic (add, sub, and, or, andi, addi, slt),
+-• the arithmetic and logic (add, sub, and, or, andi, addi, slt),
 
-• Memory-reference (lw, sw),
+-• Memory-reference (lw, sw),
 
 • jumping and branching (j, beq) instructions;
 
