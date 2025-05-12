@@ -11,9 +11,7 @@ Single cycle processor coded in verilog based on the MIPS processor
 
 • jumping and branching (j, beq) instructions;
 
-• In addition to three new instructions (lea, mvz, and pcm)
-
-
+• In addition to three new instructions (lea, mvz, and pcm) <br><br> <br><br>
 lea rt, rs, K
 R[rt] = K*R[rt] + R[rs]; multiply K by the least significant 10-
 bits of R[rt] content, then add the result to the content of R[rs]. K is a 9-bit constant.
