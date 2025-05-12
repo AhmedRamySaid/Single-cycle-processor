@@ -33,7 +33,7 @@ Perform two operations:
 
 ➢ PC = Memory[R[rt]]; set the value of PC to the loaded data from memory location Memory[R[rt]]
 
-➢ Memory[R[rs] + offset] = PC + 4; store the new value of PC to a memory location Memory[R[rs] + offset] <br><br>
+➢ Memory[R[rs] + offset] = PC + 1; store the new value of PC to a memory location Memory[R[rs] + offset] <br><br>
 
 The code for the assembler for this processor is here:
 https://github.com/AhmedRamySaid/Assembler
