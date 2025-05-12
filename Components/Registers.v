@@ -1,6 +1,6 @@
 module Registers(
 	input clk,               // Clock input
-	input reset, // Active high reset
+	input reset, 				 // Active high reset
 	input w_enable,          // Write enable
 	input [2:0] add1,        // Read address 1
 	input [2:0] add2,        // Read address 2
