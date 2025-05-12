@@ -1,6 +1,8 @@
 # Single-cycle-processor
 Single cycle processor coded in verilog based on the MIPS processor
 
+![project](https://hackaday.com/wp-content/uploads/2017/05/riscarch_featured.png?w=800)
+
 Instruction set:
 
 • the arithmetic and logic (add, sub, and, or, andi, addi, slt),
