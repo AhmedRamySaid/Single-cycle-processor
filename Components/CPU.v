@@ -13,6 +13,7 @@ module CPU(
 	wire [2:0] ALU_Code;
 	wire reg_write;
 	wire mem_write;
+	wire reg_write_enable;
 	wire I_Flag, J_Flag, branch_flag,
 		reg_mem_flag, zero_flag, lea_flag, mvz_flag, pcm_flag;
 
@@ -28,14 +29,14 @@ module CPU(
 	wire [2:0] add3; // Destination (rt/rd)
 	assign add3 = I_Flag ? add2 : instruction[8:6];
 
-	// Addresses of memory to read and write to
-	wire [4:0] read_add;
-	wire [4:0] write_add = alu_result[4:0];
-	assign read_add = pcm_flag ? add2 : alu_result[4:0];
-
 	// Data read from register memory
 	wire [18:0] reg_data1; //rs
 	wire [18:0] reg_data2; //rt
+
+	// Addresses of memory to read and write to
+	wire [4:0] read_add;
+	wire [4:0] write_add = alu_result[4:0];
+	assign read_add = pcm_flag ? reg_data2 : alu_result[4:0];
 	
 	// ALU inputs
 	reg [18:0] alu_input1;
@@ -44,13 +45,6 @@ module CPU(
 	// Data read from memory and written to memory
 	wire [18:0] mem_data;
 	wire [18:0] mem_data_in;
-	/* 
-		If pcm_flag then data written to memory is 
-			the next instruction address
-		Else write rt 
-	*/
-	assign mem_data_in = pcm_flag ? 
-		instructionAddress : reg_data2;
 
 	// Data written to registers
 	wire [18:0] reg_write_data;
@@ -60,7 +54,7 @@ module CPU(
 		else write back alu_result
 	*/
 	assign reg_write_data = 
-		(mvz_flag && zero_flag) ? reg_data1 :
+		mvz_flag ? reg_data1 :
 		reg_mem_flag ? mem_data : alu_result;
 
 	// Next PC
@@ -74,8 +68,18 @@ module CPU(
 	assign instructionAddress = 
 		pcm_flag ? mem_data :
 		J_Flag ? jump_address :
-		(branch_flag && zero_flag) ? immediate_9bit :
+		(branch_flag && zero_flag) ? pc_plus_1 + immediate_9bit :
 		pc_plus_1;
+
+	/* 
+		If pcm_flag then data written to memory is 
+			the next instruction address
+		Else write rt 
+	*/
+	assign mem_data_in = pcm_flag ? mem_data + 1 : reg_data2;
+
+	// Gotten from kmap
+	assign reg_write_enable = (reg_write & ~mvz_flag) | (reg_write & zero_flag);
 
 	// Program counter
 	PC pc (
@@ -110,7 +114,7 @@ module CPU(
 	Registers regs (
 		.clk(clk),
 		.reset(reset),
-		.w_enable(reg_write),
+		.w_enable(reg_write_enable),
 		.add1(add1),
 		.add2(add2),
 		.add3(add3),
@@ -153,8 +157,8 @@ module CPU(
 			
 			2'b10: begin // I-type instruction
 				alu_input1 <= reg_data1;
-				alu_input2 <= lea_flag ? 
-					(reg_data2 * immediate_9bit) : immediate_19bit;
+				alu_input2 <= branch_flag ? reg_data2 : 
+									lea_flag ? (reg_data2 * immediate_9bit) : immediate_19bit;
 			end
 			
 			default: ; // Currently nothing
