@@ -23,7 +23,9 @@ K is a 9-bit constant. <br><br>
 
 # mvz rd, rs, rt 
 
-if R[rt] = 0 then R[rd] = R[rs]; move the content of R[rs] to R[rd] if the content of a register R[rt]= 0 <br><br>
+if R[rt] = 0 then R[rd] = R[rs]
+
+move the content of R[rs] to R[rd] if the content of a register R[rt]= 0 <br><br>
 
 # pcm (rt), offset(rs) 
 
