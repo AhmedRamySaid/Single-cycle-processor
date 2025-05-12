@@ -11,19 +11,27 @@ Instruction set:
 
 • In addition to three new instructions (lea, mvz, and pcm)
 
+
 lea rt, rs, K
 R[rt] = K*R[rt] + R[rs]; multiply K by the least significant 10-
 bits of R[rt] content, then add the result to the content of R[rs]. K is a 9-bit constant.
+
 
 mvz rd, rs, rt 
 if R[rt] = 0 then R[rd] = R[rs]; move the content of R[rs] to
 R[rd] if the content of a register R[rt]= 0
 
+
 pcm (rt), offset(rs)
+
 Perform two operations:
+
 ➢ PC = Memory[R[rt]]; set the value of PC to the loaded data from
+
 memory location Memory[R[rt]]
+
 ➢ Memory[R[rs] + offset] = PC + 4; store the new value of
+
 PC to a memory location Memory[R[rs] + offset]
 
 The code for the assembler for this processor is here:
